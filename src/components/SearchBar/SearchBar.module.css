@@ -1,0 +1,15 @@
+.header {
+  height: 40px;
+  width: 100%;
+  background-color: antiquewhite;
+}
+
+.form {
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+  /* align-items: center; */
+  gap: 10px;
+  padding: 5px;
+  height: 30px;
+}
