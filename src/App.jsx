@@ -9,7 +9,7 @@ import ImageModal from "./components/ImageModal/ImageModal";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 
 function App() {
-  const [images, setImages] = useState("");
+  const [search, setSearch] = useState("");
   const [fetchedImages, setFetchedImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -22,12 +22,13 @@ function App() {
     openModal();
   };
   const handleSearch = (search) => {
-    setImages(search);
+    setSearch(search);
+    setPage(1);
   };
 
   const handleLoadMore = async () => {
     const nextPage = page + 1;
-    const newImages = await fetchImagesBySearch(images, nextPage);
+    const newImages = await fetchImagesBySearch(search, nextPage);
     setFetchedImages((prevImages) => [...prevImages, ...newImages]);
     setPage(nextPage);
   };
@@ -41,24 +42,27 @@ function App() {
   }
 
   useEffect(() => {
-    if (images === "") {
+    if (search === "") {
       return;
     }
+
     async function fetchImages() {
       try {
-        setTimeout(100);
         setLoading(true);
-        const data = await fetchImagesBySearch(images);
-        setFetchedImages(data);
-        setPage(1);
+        setTimeout(() => {
+          fetchImagesBySearch(search).then((data) => {
+            setFetchedImages(data);
+            setLoading(false);
+          });
+        }, 100);
       } catch (error) {
         setError(true);
-      } finally {
         setLoading(false);
       }
     }
+
     fetchImages();
-  }, [images]);
+  }, [search]);
 
   return (
     <>
